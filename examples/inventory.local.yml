@@ -1,0 +1,5 @@
+hosts:
+  - name: localhost
+    address: localhost
+    user: root
+    tags: [local]

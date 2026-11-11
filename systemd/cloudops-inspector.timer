@@ -1,0 +1,11 @@
+[Unit]
+Description=Run CloudOps Inspector daily
+
+[Timer]
+OnCalendar=*-*-* 03:00:00
+Persistent=true
+RandomizedDelaySec=300
+Unit=cloudops-inspector.service
+
+[Install]
+WantedBy=timers.target

@@ -1,0 +1,57 @@
+checks:
+  cpu_usage:
+    warn: 80
+    crit: 90
+  load_per_core:
+    warn: 1.5
+    crit: 3.0
+  memory_usage:
+    warn: 80
+    crit: 90
+  swap_usage:
+    warn: 20
+    crit: 50
+  disk_usage:
+    warn: 80
+    crit: 90
+  inode_usage:
+    warn: 80
+    crit: 90
+  failed_units:
+    warn: 1
+    crit: 5
+  zombie_processes:
+    warn: 1
+    crit: 10
+  fd_usage:
+    warn: 80
+    crit: 90
+  log_dir_size:
+    warn: 2
+    crit: 5
+  docker_service:
+    severity: warn
+  docker_containers:
+    warn: 1
+    crit: 3
+  docker_disk:
+    warn: 30
+    crit: 60
+  listening_ports:
+    enabled: true
+  ssh_config:
+    severity: crit
+  firewalld:
+    severity: warn
+  selinux:
+    severity: warn
+  chrony_synced:
+    severity: warn
+  reboot_required:
+    severity: warn
+  uptime:
+    enabled: true
+  kernel:
+    enabled: true
+  timezone:
+    enabled: true

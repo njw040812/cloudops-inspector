@@ -1,0 +1,7 @@
+hosts:
+  - name: centos9
+    address: 192.0.2.10
+    port: 22
+    user: root
+    key: ~/.ssh/id_ed25519
+    tags: [prod, centos]

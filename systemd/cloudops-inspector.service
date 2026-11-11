@@ -1,0 +1,16 @@
+[Unit]
+Description=CloudOps Inspector baseline inspection
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/opt/cloudops-inspector
+ExecStart=/opt/cloudops-inspector/.venv/bin/python -m cloudops_inspector inspect \
+  --inventory /etc/cloudops/inventory.yml \
+  --rules /etc/cloudops/rules.yml \
+  --db /var/lib/cloudops/inspector.db \
+  --output /var/lib/cloudops/reports
+User=root
+Nice=10
+IOSchedulingClass=idle

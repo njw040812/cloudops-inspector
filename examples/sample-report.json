@@ -1,0 +1,383 @@
+{
+  "run_id": "67b40ad3-1d52-4a19-a19f-799ce2186d36",
+  "started_at": "2026-11-11T09:24:50.191723+00:00",
+  "finished_at": "2026-11-11T09:24:50.191723+00:00",
+  "duration_ms": 0.0,
+  "inventory_path": "examples/inventory.yml",
+  "score": 72,
+  "counts": {
+    "ok": 15,
+    "warn": 6,
+    "crit": 1,
+    "error": 0,
+    "skip": 0
+  },
+  "hosts": [
+    {
+      "host": "centos9",
+      "address": "192.0.2.10",
+      "started_at": "2026-11-11T09:24:50.191723+00:00",
+      "finished_at": "2026-11-11T09:24:50.191723+00:00",
+      "duration_ms": 0.0,
+      "score": 72,
+      "counts": {
+        "ok": 15,
+        "warn": 6,
+        "crit": 1,
+        "error": 0,
+        "skip": 0
+      },
+      "results": [
+        {
+          "check_id": "cpu_usage",
+          "name": "CPU 使用率",
+          "category": "system",
+          "status": "ok",
+          "summary": "CPU 使用率: 21.00%",
+          "value": 21.0,
+          "unit": "%",
+          "details": [
+            "us=12 sy=8 id=79 wa=1"
+          ],
+          "remediation": "排查高 CPU 进程（top -Hp），确认是否为业务高峰或异常进程。",
+          "command": "vmstat 1 2 | tail -1",
+          "duration_ms": 0.0,
+          "error": ""
+        },
+        {
+          "check_id": "load_per_core",
+          "name": "每核负载",
+          "category": "system",
+          "status": "ok",
+          "summary": "每核 load1: 0.10",
+          "value": 0.1,
+          "unit": "",
+          "details": [
+            "load1=0.42 cores=4"
+          ],
+          "remediation": "负载持续高于核数时，检查 CPU 密集进程、IO wait 和容器资源限制。",
+          "command": "cat /proc/loadavg; nproc",
+          "duration_ms": 0.0,
+          "error": ""
+        },
+        {
+          "check_id": "memory_usage",
+          "name": "内存使用率",
+          "category": "system",
+          "status": "ok",
+          "summary": "内存使用率: 50.00%",
+          "value": 50.0,
+          "unit": "%",
+          "details": [
+            "total=8.0GiB available=4.0GiB"
+          ],
+          "remediation": "确认是否存在内存泄漏或缓存占用；必要时限制容器内存或扩容。",
+          "command": "free -b",
+          "duration_ms": 0.0,
+          "error": ""
+        },
+        {
+          "check_id": "swap_usage",
+          "name": "Swap 使用率",
+          "category": "system",
+          "status": "crit",
+          "summary": "Swap 使用率: 50.00%",
+          "value": 50.0,
+          "unit": "%",
+          "details": [
+            "used=1.0GiB total=2.0GiB"
+          ],
+          "remediation": "Swap 持续使用说明内存压力大；检查内存占用，避免依赖 swap 运行数据库。",
+          "command": "free -b",
+          "duration_ms": 0.0,
+          "error": ""
+        },
+        {
+          "check_id": "disk_usage",
+          "name": "磁盘使用率",
+          "category": "system",
+          "status": "warn",
+          "summary": "最高磁盘使用率 (/data): 85.00%",
+          "value": 85.0,
+          "unit": "%",
+          "details": [
+            "/data=85%",
+            "/=50%"
+          ],
+          "remediation": "清理日志/镜像层，或扩容磁盘；不要只删除大文件而不排查增长来源。",
+          "command": "df -P -x tmpfs -x devtmpfs -x squashfs",
+          "duration_ms": 0.0,
+          "error": ""
+        },
+        {
+          "check_id": "inode_usage",
+          "name": "Inode 使用率",
+          "category": "system",
+          "status": "ok",
+          "summary": "最高 inode 使用率 (/): 1.00%",
+          "value": 1.0,
+          "unit": "%",
+          "details": [
+            "/=1%"
+          ],
+          "remediation": "Inode 耗尽常见于大量小文件；清理临时文件/邮件队列/容器日志目录。",
+          "command": "df -Pi -x tmpfs -x devtmpfs -x squashfs",
+          "duration_ms": 0.0,
+          "error": ""
+        },
+        {
+          "check_id": "failed_units",
+          "name": "systemd 失败单元",
+          "category": "system",
+          "status": "warn",
+          "summary": "失败单元: 1",
+          "value": 1,
+          "unit": "个",
+          "details": [
+            "nginx.service loaded failed failed nginx"
+          ],
+          "remediation": "systemctl status <unit> 查看失败原因；修复后 systemctl reset-failed。",
+          "command": "systemctl --failed --no-legend --plain",
+          "duration_ms": 0.0,
+          "error": ""
+        },
+        {
+          "check_id": "zombie_processes",
+          "name": "僵尸进程",
+          "category": "system",
+          "status": "warn",
+          "summary": "僵尸进程数: 3.00个",
+          "value": 3,
+          "unit": "个",
+          "details": [],
+          "remediation": "僵尸进程通常由父进程未回收导致；检查父进程并重启对应服务。",
+          "command": "ps -eo stat= | awk '$1 ~ /^Z/ {c++} END {print c+0}'",
+          "duration_ms": 0.0,
+          "error": ""
+        },
+        {
+          "check_id": "fd_usage",
+          "name": "文件描述符使用率",
+          "category": "system",
+          "status": "ok",
+          "summary": "文件描述符使用率: 0.10%",
+          "value": 0.1,
+          "unit": "%",
+          "details": [
+            "allocated=1024 max=1048576"
+          ],
+          "remediation": "排查 fd 泄漏（lsof -p <pid>）；必要时调整 fs.file-max 或进程 limits。",
+          "command": "cat /proc/sys/fs/file-nr",
+          "duration_ms": 0.0,
+          "error": ""
+        },
+        {
+          "check_id": "log_dir_size",
+          "name": "日志目录大小",
+          "category": "system",
+          "status": "warn",
+          "summary": "日志目录大小: 3.00GB",
+          "value": 3.0,
+          "unit": "GB",
+          "details": [],
+          "remediation": "检查日志轮转（logrotate）和 journald 限制；不要直接删除正在写入的日志。",
+          "command": "du -sb /var/log 2>/dev/null | cut -f1",
+          "duration_ms": 0.0,
+          "error": ""
+        },
+        {
+          "check_id": "docker_service",
+          "name": "Docker 服务状态",
+          "category": "docker",
+          "status": "ok",
+          "summary": "Docker 服务: active",
+          "value": null,
+          "unit": "",
+          "details": [
+            "state=active"
+          ],
+          "remediation": "systemctl status docker / journalctl -u docker 查看启动失败原因。",
+          "command": "systemctl is-active docker 2>/dev/null; command -v docker || true",
+          "duration_ms": 0.0,
+          "error": ""
+        },
+        {
+          "check_id": "docker_containers",
+          "name": "Docker 容器健康",
+          "category": "docker",
+          "status": "warn",
+          "summary": "容器 2 个；unhealthy=0 restarting=1",
+          "value": 1.0,
+          "unit": "个",
+          "details": [
+            "api: restarting"
+          ],
+          "remediation": "查看 docker ps -a / docker logs <name>；重启次数高要检查应用和资源限制。",
+          "command": "docker ps -a --format '{{.Names}}|{{.State}}|{{.RestartCount}}|{{.Status}}'",
+          "duration_ms": 0.0,
+          "error": ""
+        },
+        {
+          "check_id": "docker_disk",
+          "name": "Docker 可回收空间",
+          "category": "docker",
+          "status": "warn",
+          "summary": "Docker 可回收空间: 40.00%",
+          "value": 40.0,
+          "unit": "%",
+          "details": [
+            "Images|1.2GB|1.2GB (40%)",
+            "Containers|10MB|0B (0%)"
+          ],
+          "remediation": "确认无用镜像/容器后执行 docker image prune / docker system prune，避免误删运行中依赖。",
+          "command": "docker system df --format '{{.Type}}|{{.Size}}|{{.Reclaimable}}'",
+          "duration_ms": 0.0,
+          "error": ""
+        },
+        {
+          "check_id": "listening_ports",
+          "name": "监听端口",
+          "category": "network",
+          "status": "ok",
+          "summary": "监听端口 2 个",
+          "value": 2.0,
+          "unit": "个",
+          "details": [
+            "0.0.0.0:22",
+            "127.0.0.1:9090"
+          ],
+          "remediation": "核对非预期端口；云服务器应只开放业务和安全组允许的端口。",
+          "command": "ss -lntu",
+          "duration_ms": 0.0,
+          "error": ""
+        },
+        {
+          "check_id": "ssh_config",
+          "name": "SSH 安全基线",
+          "category": "security",
+          "status": "ok",
+          "summary": "SSH 基线通过",
+          "value": null,
+          "unit": "",
+          "details": [
+            "root=no password=no max_auth=3"
+          ],
+          "remediation": "建议 PermitRootLogin no/prohibit-password、PasswordAuthentication no、MaxAuthTries<=4，改完先 sshd -t 再 reload。",
+          "command": "sshd -T 2>/dev/null | grep -E '^(permitrootlogin|passwordauthentication|maxauthtries)'",
+          "duration_ms": 0.0,
+          "error": ""
+        },
+        {
+          "check_id": "firewalld",
+          "name": "防火墙状态",
+          "category": "security",
+          "status": "ok",
+          "summary": "firewalld: active",
+          "value": null,
+          "unit": "",
+          "details": [
+            "state=active"
+          ],
+          "remediation": "云服务器至少配置安全组；如使用 firewalld，systemctl enable --now firewalld 并核对开放端口。",
+          "command": "systemctl is-active firewalld 2>/dev/null",
+          "duration_ms": 0.0,
+          "error": ""
+        },
+        {
+          "check_id": "selinux",
+          "name": "SELinux 状态",
+          "category": "security",
+          "status": "ok",
+          "summary": "SELinux: Enforcing",
+          "value": null,
+          "unit": "",
+          "details": [
+            "state=Enforcing"
+          ],
+          "remediation": "生产环境建议 Enforcing；切换模式前先排查 AVC 拒绝，不要直接关闭。",
+          "command": "getenforce",
+          "duration_ms": 0.0,
+          "error": ""
+        },
+        {
+          "check_id": "chrony_synced",
+          "name": "时间同步",
+          "category": "system",
+          "status": "ok",
+          "summary": "NTP 同步: yes",
+          "value": null,
+          "unit": "",
+          "details": [
+            "state=yes"
+          ],
+          "remediation": "检查 chrony/ntp 服务与上游源；时间漂移会影响日志、证书和主从复制。",
+          "command": "timedatectl show -p NTPSynchronized --value",
+          "duration_ms": 0.0,
+          "error": ""
+        },
+        {
+          "check_id": "reboot_required",
+          "name": "是否需要重启",
+          "category": "maintenance",
+          "status": "ok",
+          "summary": "重启标记: no",
+          "value": null,
+          "unit": "",
+          "details": [
+            "state=no"
+          ],
+          "remediation": "内核/关键库更新后按变更窗口重启；重启前确认业务多副本和回滚预案。",
+          "command": "sh -c 'if command -v needs-restarting >/dev/null 2>&1; then needs-restarting -r >/dev/null 2>&1 && echo no || echo yes; elif [ -f /var/run/reboot-required ]; then echo yes; else echo no; fi'",
+          "duration_ms": 0.0,
+          "error": ""
+        },
+        {
+          "check_id": "uptime",
+          "name": "运行时长",
+          "category": "system",
+          "status": "ok",
+          "summary": "运行 1.4 天",
+          "value": 1.4,
+          "unit": "天",
+          "details": [],
+          "remediation": "运行时长仅作参考；长期不重启不代表健康，结合内核更新和安全补丁判断。",
+          "command": "cat /proc/uptime",
+          "duration_ms": 0.0,
+          "error": ""
+        },
+        {
+          "check_id": "kernel",
+          "name": "内核版本",
+          "category": "system",
+          "status": "ok",
+          "summary": "内核: 5.14.0-427.el9.x86_64",
+          "value": null,
+          "unit": "",
+          "details": [
+            "5.14.0-427.el9.x86_64"
+          ],
+          "remediation": "仅作资产记录；内核升级请走变更流程并准备重启窗口。",
+          "command": "uname -r",
+          "duration_ms": 0.0,
+          "error": ""
+        },
+        {
+          "check_id": "timezone",
+          "name": "时区",
+          "category": "system",
+          "status": "ok",
+          "summary": "时区: Asia/Shanghai",
+          "value": null,
+          "unit": "",
+          "details": [
+            "Asia/Shanghai"
+          ],
+          "remediation": "统一使用 UTC 或业务时区，避免日志/定时任务/数据库时间不一致。",
+          "command": "timedatectl show -p Timezone --value",
+          "duration_ms": 0.0,
+          "error": ""
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,3 @@
+# Optional: asyncssh backend instead of the system OpenSSH client.
+# Enable with CLOUDOPS_SSH_BACKEND=asyncssh.
+asyncssh==2.24.1
