@@ -1,5 +1,9 @@
 # CloudOps Inspector
 
+![tests](https://github.com/njw040812/cloudops-inspector/actions/workflows/tests.yml/badge.svg)
+![Python](https://img.shields.io/badge/python-3.9%2B-blue)
+![License](https://img.shields.io/badge/license-MIT-green)
+
 > 面向 Linux 云服务器的**只读巡检与基线报告工具**。不替代 Prometheus，补的是“配置基线 / 巡检报告 / 历史趋势”。
 
 ## 它解决什么问题
