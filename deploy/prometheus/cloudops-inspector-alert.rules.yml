@@ -1,0 +1,42 @@
+groups:
+  - name: cloudops-inspector
+    rules:
+      - alert: CloudOpsInspectorLowScore
+        expr: cloudops_inspector_last_score < 80
+        for: 15m
+        labels:
+          severity: warning
+          service: cloudops-inspector
+        annotations:
+          summary: "CloudOps Inspector score is below 80"
+          description: "Latest baseline score is {{ $value }}. Check the latest HTML report."
+
+      - alert: CloudOpsInspectorCriticalFindings
+        expr: cloudops_inspector_last_checks{status="crit"} > 0
+        for: 5m
+        labels:
+          severity: critical
+          service: cloudops-inspector
+        annotations:
+          summary: "CloudOps Inspector has critical findings"
+          description: "{{ $value }} critical check(s) in the latest run. Review the report and remediation hints."
+
+      - alert: CloudOpsInspectorExecutionErrors
+        expr: cloudops_inspector_last_checks{status="error"} > 0
+        for: 5m
+        labels:
+          severity: warning
+          service: cloudops-inspector
+        annotations:
+          summary: "CloudOps Inspector checks failed to execute"
+          description: "{{ $value }} check(s) returned an execution error; inspect the collector/SSH output."
+
+      - alert: CloudOpsInspectorStale
+        expr: time() - cloudops_inspector_last_run_timestamp_seconds > 90000
+        for: 10m
+        labels:
+          severity: warning
+          service: cloudops-inspector
+        annotations:
+          summary: "CloudOps Inspector has not run for over 25 hours"
+          description: "Check cloudops-inspector.timer and the systemd journal."

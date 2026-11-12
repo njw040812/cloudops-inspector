@@ -39,3 +39,5 @@ def test_api(tmp_path, run_report):
     assert checks["total"] == 22
     metrics = client.get("/metrics")
     assert "cloudops_inspector_runs_total 1" in metrics.text
+    assert "cloudops_inspector_last_run_timestamp_seconds" in metrics.text
+    assert f"cloudops_inspector_last_score {run_report.score}" in metrics.text

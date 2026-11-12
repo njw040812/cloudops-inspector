@@ -135,6 +135,16 @@ python -m cloudops_inspector serve --db data/inspector.db --port 8000
 - `GET /api/v1/runs/{run_id}`
 - `GET /metrics`
 
+生产环境用 systemd 常驻 API（只监听 127.0.0.1）：
+
+```bash
+systemctl enable --now cloudops-inspector-api.service
+curl -s http://127.0.0.1:8000/health
+curl -s http://127.0.0.1:8000/metrics | head
+```
+
+Prometheus 接入与告警规则见 [deploy/prometheus/README.md](deploy/prometheus/README.md)。
+
 ## 部署到 CentOS Stream 9
 
 ```bash
@@ -157,9 +167,10 @@ systemd：
 
 ```bash
 sudo cp systemd/cloudops-inspector.service /etc/systemd/system/
+sudo cp systemd/cloudops-inspector-api.service /etc/systemd/system/
 sudo cp systemd/cloudops-inspector.timer /etc/systemd/system/
 sudo systemctl daemon-reload
-sudo systemctl enable --now cloudops-inspector.timer
+sudo systemctl enable --now cloudops-inspector.timer cloudops-inspector-api.service
 ```
 
 或者一键安装（CentOS Stream 9，root）：

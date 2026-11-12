@@ -1,0 +1,17 @@
+# Copy the `- job_name` block into `scrape_configs:` in prometheus.yml.
+# For Prometheus running in Docker (Dockprom), add this to the prometheus
+# service first:
+#
+#   extra_hosts:
+#     - "host.docker.internal:host-gateway"
+#
+# For a host-installed Prometheus, change the target to 127.0.0.1:8000.
+
+- job_name: cloudops-inspector
+  metrics_path: /metrics
+  scrape_interval: 60s
+  static_configs:
+    - targets: ["host.docker.internal:8000"]
+      labels:
+        service: cloudops-inspector
+        instance: centos9

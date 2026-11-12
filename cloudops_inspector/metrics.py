@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from datetime import datetime
+
 from .storage import Store
 
 
@@ -21,6 +23,20 @@ def render_metrics(store: Store) -> str:
             "# HELP cloudops_inspector_last_duration_ms Duration of the latest run",
             "# TYPE cloudops_inspector_last_duration_ms gauge",
             f"cloudops_inspector_last_duration_ms {latest['duration_ms']}",
+        ]
+        try:
+            timestamp = datetime.fromisoformat(latest["started_at"]).timestamp()
+        except (KeyError, TypeError, ValueError):
+            timestamp = None
+        if timestamp is not None:
+            lines += [
+                "# HELP cloudops_inspector_last_run_timestamp_seconds Unix time of the latest run",
+                "# TYPE cloudops_inspector_last_run_timestamp_seconds gauge",
+                f"cloudops_inspector_last_run_timestamp_seconds {timestamp:.0f}",
+            ]
+        lines += [
+            "# HELP cloudops_inspector_last_checks Number of checks by status in the latest run",
+            "# TYPE cloudops_inspector_last_checks gauge",
         ]
         for status in ("ok", "warn", "crit", "error", "skip"):
             lines.append(
