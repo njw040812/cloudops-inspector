@@ -6,6 +6,8 @@
 
 > 面向 Linux 云服务器的**只读巡检与基线报告工具**。不替代 Prometheus，补的是“配置基线 / 巡检报告 / 历史趋势”。
 
+![巡检报告](docs/report.png)
+
 ## 它解决什么问题
 
 监控系统告诉你“CPU 高了”，CloudOps Inspector 告诉你：
