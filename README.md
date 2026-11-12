@@ -162,6 +162,14 @@ sudo systemctl daemon-reload
 sudo systemctl enable --now cloudops-inspector.timer
 ```
 
+或者一键安装（CentOS Stream 9，root）：
+
+```bash
+git clone https://github.com/njw040812/cloudops-inspector.git /opt/cloudops-inspector
+cd /opt/cloudops-inspector
+bash scripts/install-centos9.sh
+```
+
 ## Docker
 
 ```bash
