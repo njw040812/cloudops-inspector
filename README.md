@@ -146,6 +146,16 @@ curl -s http://172.17.0.1:8000/metrics | head
 
 Prometheus 接入与告警规则见 [deploy/prometheus/README.md](deploy/prometheus/README.md)。
 
+## Grafana 面板
+
+可导入的看板 JSON：[deploy/grafana/cloudops-inspector-dashboard.json](deploy/grafana/cloudops-inspector-dashboard.json)
+
+包含健康分、CRIT/WARN、最近巡检时间、Target 状态、7 天趋势和检查状态表格。导入方式见 [deploy/grafana/README.md](deploy/grafana/README.md)。
+
+## 设计说明
+
+架构、关键取舍和真实踩坑记录见 [docs/design.md](docs/design.md)。
+
 ## 部署到 CentOS Stream 9
 
 ```bash
