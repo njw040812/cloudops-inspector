@@ -58,6 +58,18 @@ def test_docker_missing_is_skip(rules):
     assert result.status == Status.SKIP
 
 
+def test_docker_broken_format_is_error(rules):
+    result = DockerContainersCheck().evaluate(
+        CommandResult(
+            "docker ps",
+            stderr="template: :1:24: executing \"\" at <.RestartCount>: can't evaluate field",
+            exit_code=1,
+        ),
+        rules.get("docker_containers"),
+    )
+    assert result.status == Status.ERROR
+
+
 async def test_inspect_host_all_checks(host, rules, fake_executor):
     from cloudops_inspector.checks import inspect_host
 

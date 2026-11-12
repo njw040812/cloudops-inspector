@@ -39,8 +39,8 @@ SAMPLE: Dict[str, str] = {
     "log_dir_size": "3221225472\n",
     "docker_service": "active\n/usr/bin/docker\n",
     "docker_containers": (
-        "web|running|0|Up 2 hours\n"
-        "api|restarting|3|Restarting (1) 10 seconds ago\n"
+        "web|running|Up 2 hours\n"
+        "api|restarting|Restarting (1) 10 seconds ago\n"
     ),
     "docker_disk": "Images|1.2GB|1.2GB (40%)\nContainers|10MB|0B (0%)\n",
     "listening_ports": (

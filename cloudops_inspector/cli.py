@@ -40,7 +40,7 @@ def _inspect(args: argparse.Namespace) -> int:
     print(f"html={paths['html']}")
     print(f"markdown={paths['markdown']}")
     print(f"json={paths['json']}")
-    return 0 if counts["crit"] == 0 and counts["error"] == 0 else 1
+    return 0 if args.exit_zero or (counts["crit"] == 0 and counts["error"] == 0) else 1
 
 
 def _history(args: argparse.Namespace) -> int:
@@ -87,6 +87,11 @@ def build_parser() -> argparse.ArgumentParser:
     inspect.add_argument("--db", default="data/inspector.db")
     inspect.add_argument("--output", default="reports")
     inspect.add_argument("--concurrency", type=int, default=4)
+    inspect.add_argument(
+        "--exit-zero",
+        action="store_true",
+        help="exit 0 even when warnings/critical findings exist (for scheduled runs)",
+    )
     inspect.set_defaults(func=_inspect)
 
     history = sub.add_parser("history", help="show recent runs")

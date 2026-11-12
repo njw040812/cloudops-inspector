@@ -235,30 +235,30 @@ class DockerContainersCheck(Check):
     id = "docker_containers"
     name = "Docker 容器健康"
     category = "docker"
-    command = "docker ps -a --format '{{.Names}}|{{.State}}|{{.RestartCount}}|{{.Status}}'"
-    remediation = "查看 docker ps -a / docker logs <name>；重启次数高要检查应用和资源限制。"
+    command = "docker ps -a --format '{{.Names}}|{{.State}}|{{.Status}}'"
+    remediation = "查看 docker ps -a / docker logs <name>；反复重启要检查应用日志和资源限制。"
 
     def evaluate(self, result: CommandResult, rule: Dict[str, Any]) -> CheckResult:
         if result.missing:
             return self.skip(result, "未安装 Docker")
+        if not result.ok and not result.stdout.strip():
+            return self.error(result, f"docker ps 执行失败: {result.stderr.strip()[:200]}")
         unhealthy = 0
         restarting = 0
         details = []
         total = 0
         for line in _lines(result):
             parts = line.split("|")
-            if len(parts) < 4:
+            if len(parts) < 3:
                 continue
             total += 1
-            name, state, restarts, status_text = parts[0], parts[1], parts[2], parts[3]
+            name, state, status_text = parts[0], parts[1], parts[2]
             if "unhealthy" in status_text.lower():
                 unhealthy += 1
                 details.append(f"{name}: {status_text}")
-            if state.lower() == "restarting":
+            if state.lower() == "restarting" or "restarting" in status_text.lower():
                 restarting += 1
                 details.append(f"{name}: restarting")
-            elif _int(restarts) > 0 and len(details) < 8:
-                details.append(f"{name}: restart_count={restarts}")
         status = max(
             (threshold_status(unhealthy, rule), threshold_status(restarting, rule)),
             key=lambda item: [Status.OK, Status.WARN, Status.CRIT].index(item),

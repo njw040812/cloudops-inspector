@@ -10,7 +10,8 @@ ExecStart=/opt/cloudops-inspector/.venv/bin/python -m cloudops_inspector inspect
   --inventory /etc/cloudops/inventory.yml \
   --rules /etc/cloudops/rules.yml \
   --db /var/lib/cloudops/inspector.db \
-  --output /var/lib/cloudops/reports
+  --output /var/lib/cloudops/reports \
+  --exit-zero
 User=root
 Nice=10
 IOSchedulingClass=idle
