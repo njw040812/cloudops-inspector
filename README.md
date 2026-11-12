@@ -135,12 +135,13 @@ python -m cloudops_inspector serve --db data/inspector.db --port 8000
 - `GET /api/v1/runs/{run_id}`
 - `GET /metrics`
 
-生产环境用 systemd 常驻 API（只监听 127.0.0.1）：
+生产环境用 systemd 常驻 API（默认只监听 127.0.0.1；Docker 主机会绑定 172.17.0.1 供 Prometheus 抓取，不暴露公网）：
 
 ```bash
 systemctl enable --now cloudops-inspector-api.service
-curl -s http://127.0.0.1:8000/health
-curl -s http://127.0.0.1:8000/metrics | head
+curl -s http://172.17.0.1:8000/health     # Docker 主机
+# 非 Docker 主机用 http://127.0.0.1:8000/health
+curl -s http://172.17.0.1:8000/metrics | head
 ```
 
 Prometheus 接入与告警规则见 [deploy/prometheus/README.md](deploy/prometheus/README.md)。
